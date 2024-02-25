@@ -79,8 +79,8 @@ class StoryList {
     const newStory = {
       "token": user.loginToken,
       "story": {
-        "author": author, 
         "title": title,
+        "author": author, 
         "url": url
       }
     };
@@ -88,8 +88,9 @@ class StoryList {
     const postedStory = await axios.post(`${BASE_URL}/stories`, newStory);
 
     // makes a Story instance
-    let storyInst = new Story(postedStory);
+    let storyInst = new Story(postedStory.data.story);
     this.stories.push(storyInst);
+    user.ownStories.unshift(storyInst);
     return storyInst;
 
   }
@@ -214,5 +215,15 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+
+//post api to favorite a story
+async favoriteStory(story){
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "POST",
+      data: {token: this.loginToken},
+    });
   }
 }
