@@ -57,8 +57,8 @@ function addNewStoryToPage() {
   $addstoryform.on("submit",function(e){
     e.preventDefault();
     let title = $("#story-title").val();
-    let author = $("story-author").val();
-    let url = $("story-url").val();
+    let author = $("#story-author").val();
+    let url = $("#story-url").val();
     storyList.addStory(currentUser,
       {title, author, url});
     // putStoriesOnPage();
