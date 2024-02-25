@@ -51,3 +51,17 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 
 }
+
+// KQ created this function to call add stories when btn submit
+function addNewStoryToPage() {
+  $addstoryform.on("submit",function(e){
+    e.preventDefault();
+    let title = $("#story-title").val();
+    let author = $("story-author").val();
+    let url = $("story-url").val();
+    storyList.addStory(currentUser,
+      {title, author, url});
+    // putStoriesOnPage();
+  })
+
+}
