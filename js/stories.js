@@ -19,21 +19,40 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
+//returns true or false if favorited and should show star 
+const showStar = Boolean(currentUser);
+
+
+
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
-      </li>
+      <div>
+          ${showStar ? getStarHTML(story,currentUser) : ""}
+          <a href="${story.url}" target="a_blank" class="story-link">
+            ${story.title}
+          </a>
+          <small class="story-hostname">(${hostName})</small>
+          <small class="story-author">by ${story.author}</small>
+          <small class="story-user">posted by ${story.username}</small>
+        </li>
+      </div?
     `);
 }
+
+/** Make favorite/not-favorite star for story */
+function getStarHTML(story,user){
+  const isFavorite = user.storyIsFavorite(story);
+  starType = isFavorite ? "fas" : "far";
+  return `
+  <span class = "star">
+  <i class = "${starType} fa-star"></i>
+  </span>`;
+}
+
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
@@ -61,9 +80,10 @@ async function addNewStoryToPage(e){
 
   let newStory = await storyList.addStory(currentUser,
     {title, url, author});
-    
+
   let $story = generateStoryMarkup(newStory);  
   $allStoriesList.prepend($story);
+  $addstoryform.hide();
 
 }
 

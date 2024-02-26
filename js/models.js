@@ -24,9 +24,11 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    let parsedURL = new URL(this.url);
+    let hostname = parsedURL.hostname;
+    return hostname;
   }
+
 }
 
 
@@ -217,13 +219,40 @@ class User {
     }
   }
 
+    /** Add a story to the list of user favorites and update the API
+   * - story: a Story instance to add to favorites
+   */
+  async addStoryToFavorite(story){
+    this.favorites.push(story);
+    await this.addOrRemoveFavorite("add",story);
+  }
 
-//post api to favorite a story
-async favoriteStory(story){
-    const response = await axios({
+
+      /** Remove a story to the list of user favorites and update the API
+   * - story: the Story instance to remove from favorites
+   */
+  async removeStoryFavorites(story){
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    await this.addOrRemoveFavorite("remove",story);
+  }
+
+  /** Update API with favorite/not-favorite.
+   *   - newState: "add" or "remove"
+   *   - story: Story instance to make favorite / not favorite
+   * */
+async addOrRemoveFavorite (newState, story){
+    let method = newState == "add" ? "POST" : "DELETE"; 
+    await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
-      method: "POST",
+      method: method,
       data: {token: this.loginToken},
     });
   }
+
+
+  /** Return true/false if given Story instance is a favorite of this user. */
+storyIsFavorite (story){
+  return this.favorites.some(s => (s.storyId === story.storyId));
+}
+
 }
