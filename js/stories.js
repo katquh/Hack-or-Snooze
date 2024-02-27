@@ -20,13 +20,13 @@ async function getAndShowStoriesOnStart() {
  */
 
 //returns true or false if favorited and should show star 
-const showStar = Boolean(currentUser);
+// const showStar = currentUser == undefined ? false : true;
 
 
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
-
+  const showStar = currentUser == undefined ? false : true
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
@@ -46,12 +46,19 @@ function generateStoryMarkup(story) {
 /** Make favorite/not-favorite star for story */
 function getStarHTML(story,user){
   const isFavorite = user.storyIsFavorite(story);
-  starType = isFavorite ? "fas" : "far";
+  const starType = isFavorite ? "fas" : "far";
   return `
   <span class = "star">
   <i class = "${starType} fa-star"></i>
   </span>`;
 }
+
+//add event listener for star
+const $star = $("i");
+$star.on("click",function(){
+  currentUser.addStoryToFavorite(story);
+})
+
 
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
