@@ -45,4 +45,12 @@ function submitnewstory(){
 
 $submit.on("click", submitnewstory);
 
-$favoritebtn.on("click", putFavoritesListOnPage);
+
+/** Show favorite stories on click on "favorites" */
+function navFavoritesClick(){
+  hidePageComponents();
+  putFavoritesListOnPage();
+  clickfavoritesbutton();
+  }
+
+$favoritebtn.on("click", navFavoritesClick);

@@ -115,7 +115,7 @@ async function addNewStoryToPage(e){
 /** Put favorites list on page. */
 function putFavoritesListOnPage(){
   $favoritedStories.empty();
-  if (currentUser.favorites.length() === 0){
+  if (currentUser.favorites.length === 0){
     $favoritedStories.append("<h5> No stories favoritied </h5>")
   }
   else {
@@ -127,3 +127,6 @@ function putFavoritesListOnPage(){
   }
   $favoritedStories.show();
 }
+
+
+
