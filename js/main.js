@@ -30,7 +30,7 @@ function hidePageComponents() {
     $loginForm,
     $signupForm,
     $addstoryform,
-    $(".main-nav-links"),
+    $favoritedStories,
   ];
   components.forEach(c => c.hide());
 }
@@ -48,7 +48,7 @@ async function start() {
   await getAndShowStoriesOnStart();
 
   // if we got a logged-in user
-  if (currentUser) updateUIOnUserLogin();
+  currentUser ? updateUIOnUserLogin() : $(".main-nav-links").hide();
 }
 
 // Once the DOM is entirely loaded, begin the app

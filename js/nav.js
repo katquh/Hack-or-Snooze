@@ -50,7 +50,6 @@ $submit.on("click", submitnewstory);
 function navFavoritesClick(){
   hidePageComponents();
   putFavoritesListOnPage();
-  clickfavoritesbutton();
   }
 
 $favoritebtn.on("click", navFavoritesClick);
