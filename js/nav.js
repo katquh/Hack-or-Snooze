@@ -43,4 +43,6 @@ function submitnewstory(){
   $addstoryform.show();
 }
 
-$submit.on("click", submitnewstory)
+$submit.on("click", submitnewstory);
+
+$favoritebtn.on("click", putFavoritesListOnPage);
