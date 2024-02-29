@@ -19,27 +19,27 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
-//returns true or false if favorited and should show star 
-// const showStar = currentUser == undefined ? false : true;
+const showStar = Boolean(currentUser);
 
 
 
-function generateStoryMarkup(story) {
+function generateStoryMarkup(story, showTrashCan = false) {
   // console.debug("generateStoryMarkup", story);
   const showStar = currentUser == undefined ? false : true
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
       <div>
+          ${showTrashCan ? createTrashCanBtn() : ""}
           ${showStar ? getStarHTML(story,currentUser) : ""}
           <a href="${story.url}" target="a_blank" class="story-link">
             ${story.title}
           </a>
           <small class="story-hostname">(${hostName})</small>
-          <small class="story-author">by ${story.author}</small>
-          <small class="story-user">posted by ${story.username}</small>
+          <div class="story-author">by ${story.author}</div>
+          <div class="story-user">posted by ${story.username}</div>
         </li>
-      </div?
+      </div>
     `);
 }
 
@@ -116,7 +116,7 @@ async function addNewStoryToPage(e){
 function putFavoritesListOnPage(){
   $favoritedStories.empty();
   if (currentUser.favorites.length === 0){
-    $favoritedStories.append("<h5> No stories favoritied </h5>")
+    $favoritedStories.append("<h5> No stories favorited </h5>")
   }
   else {
     // loop through all of our stories and generate HTML for them
@@ -128,5 +128,40 @@ function putFavoritesListOnPage(){
   $favoritedStories.show();
 }
 
+// Put my own stories on page 
+function putOwnStoriesOnPage(){
+  $myStories.empty();
+  if (currentUser.ownStories.length === 0){
+    $myStories.append("<h5> No stories added! </h5>");
+  }
+  else {
+    for (let story of currentUser.ownStories){
+      const $myStory = generateStoryMarkup(story,true);
+      $myStories.prepend($myStory);
+    }
+  }
+  $myStories.show();
+}
 
+//trashcan HTML for deletion
+function createTrashCanBtn(){
+  return `
+  <span class = "trash-can">
+    <i class = "fas fa-trash-alt"></i>
+  </span>
+  `
+}
+
+//remove story markup
+async function removeStoryOnPage(e){
+  e.preventDefault();
+  const $tgt = $(e.target);
+  const $closestLi = $tgt.closest("li");
+  const $storyId = $closestLi.attr("id");
+  await storyList.removeStory(currentUser,$storyId);
+  $closestLi.remove();
+  
+}
+
+$myStories.on("click", ".trash-can", removeStoryOnPage)
 

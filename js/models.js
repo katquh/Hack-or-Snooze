@@ -76,7 +76,6 @@ class StoryList {
    */
 
   async addStory(user, {title, author, url}) {
-    // UNIMPLEMENTED: complete this function!
 
     const newStory = {
       "token": user.loginToken,
@@ -96,12 +95,30 @@ class StoryList {
     return storyInst;
 
   }
-  }
 
-// $submit.on("submit",function(e){
-//   e.preventDefault();
-//   addStory;
-// })
+  // Remove/delete story from API
+  async removeStory(user, storyId){
+    const token = user.loginToken;
+    const jsonData = {
+      token: token
+    };
+    // const deletedStory = await axios.delete(`${BASE_URL}/stories/${storyId}`,jsonData);
+    // return deletedStory;
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: jsonData
+    });
+    //delete from storylist.stories 
+    this.stories = this.stories.filter( s => s.storyId !== storyId);
+    //delete from user.ownstories
+    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId);
+    //delete from user.favorites
+    user.favorites = user.favorites.filter(s => s.storyId !== storyId);
+    // 
+  }
+}
+
 
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)

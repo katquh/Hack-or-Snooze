@@ -40,8 +40,14 @@ function updateNavOnLogin() {
 // when a user clicks submit to create a new story 
 function submitnewstory(){
   console.debug("createnewstory");
+  hidePageComponents();
   $addstoryform.show();
-}
+  $allStoriesList.show();
+  $("#story-title").val("");
+  $("#story-author").val("");
+  $("#story-url").val("");
+};
+
 
 $submit.on("click", submitnewstory);
 
@@ -53,3 +59,12 @@ function navFavoritesClick(){
   }
 
 $favoritebtn.on("click", navFavoritesClick);
+
+
+// Show my own stories on click of mystories button 
+function myStoriesClick(){
+  hidePageComponents();
+  putOwnStoriesOnPage();
+}
+
+$myStoriesBtn.on("click", myStoriesClick);
